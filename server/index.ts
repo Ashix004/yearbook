@@ -1,6 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { createServer } from 'vite';
 import type { Request, Response } from 'express';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +17,16 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(join(__dirname, '../dist/public')));
+} else {
+  // In development, create Vite dev server
+  const vite = await createServer({
+    server: { middlewareMode: true },
+    appType: 'spa',
+    root: join(__dirname, '../client')
+  });
+  
+  app.use(vite.ssrFixStacktrace);
+  app.use(vite.middlewares);
 }
 
 // API routes
@@ -24,17 +35,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 // Development route - redirect to Vite dev server or show development message
-if (process.env.NODE_ENV === 'development') {
-  app.get('/', (req: Request, res: Response) => {
-    res.json({ 
-      message: 'Development server is running',
-      endpoints: {
-        health: '/api/health'
-      },
-      note: 'This is the Express API server. The React frontend should be served by Vite on a different port.'
-    });
-  });
-}
+// Remove the development route since Vite will handle the root route
 
 // Serve React app in production
 if (process.env.NODE_ENV === 'production') {
