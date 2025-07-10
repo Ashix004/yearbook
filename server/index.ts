@@ -23,6 +23,19 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Development route - redirect to Vite dev server or show development message
+if (process.env.NODE_ENV === 'development') {
+  app.get('/', (req: Request, res: Response) => {
+    res.json({ 
+      message: 'Development server is running',
+      endpoints: {
+        health: '/api/health'
+      },
+      note: 'This is the Express API server. The React frontend should be served by Vite on a different port.'
+    });
+  });
+}
+
 // Serve React app in production
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (req: Request, res: Response) => {
