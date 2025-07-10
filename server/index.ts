@@ -35,10 +35,10 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 // Development route - redirect to Vite dev server or show development message
-// Remove the development route since Vite will handle the root route
-
-// Serve React app in production
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
+  // Let Vite handle all routes in development
+} else {
+  // Serve React app in production
   app.get('*', (req: Request, res: Response) => {
     res.sendFile(join(__dirname, '../dist/public/index.html'));
   });
@@ -47,4 +47,7 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`Vite dev server should be handling client routes`);
+  }
 });
