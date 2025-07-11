@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from './card';
 
-
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
