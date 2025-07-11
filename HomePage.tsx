@@ -1,15 +1,12 @@
 import React from 'react';
-import Card from './card';
 
-const HomePage = () => {
+const Card = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Card>
-        <h1 className="text-xl font-bold">🚀 Yearbook Starter</h1>
-        <p className="mt-2 text-gray-600">Edit this page to get started!</p>
-      </Card>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      {children}
     </div>
   );
 };
 
-export default HomePage;
+export default Card;
+
